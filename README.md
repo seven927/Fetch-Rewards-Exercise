@@ -2,7 +2,7 @@
 This is a REST API implemented with ASP.NET Core for Fetch Rewards exercise
 
 ## Install
-Install [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/). This will install .Net Core SDK as well. 
+Install [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/). This will install .Net Core SDK as well. When you are asked to select workload, select ASP.NET and web development. Refer to this [guide](https://learn.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022) for more details
 
 ## Test
 
