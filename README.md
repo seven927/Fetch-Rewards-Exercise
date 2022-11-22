@@ -1,19 +1,21 @@
 # Fetch-Rewards-Exercise
-This is a REST API implemented with ASP.NET Core for Fetch Rewards exercise
+This is a REST API implemented with ASP.NET Core for Fetch Rewards exercise.
 
 ## Install
-Install [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/). This will install .Net Core SDK as well. When you are asked to select workload, select ASP.NET and web development. Refer to this [guide](https://learn.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022) for more details
+Install [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/). This will install .Net Core SDK as well. When you are asked to select workload, select ASP.NET and web development. Refer to this [guide](https://learn.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022) for more details.
+
+![image](https://user-images.githubusercontent.com/7350037/203203056-61039346-f42f-4271-85ac-e4514a682c27.png)
 
 ## Test
 
-Open the solution in Visual Studio and run from source. You will see the following Swagger UI in the browser. 
+Open the solution in Visual Studio and run from source. You will see the following Swagger UI in the browser:
 
 
 <img width="951" alt="image" src="https://user-images.githubusercontent.com/7350037/202968519-dcdf7ed3-d2b6-42a9-b0c7-1c46ed13642a.png">
 
 To execute the API, you need to expand the section for the corresponding API. Click Try it out and then enter the input parameters. Then click Execute to send the request.
 
-### Test Adding Points
+### Test Adding Points (PUT Request)
 
 You will need to enter the following input:
 
@@ -28,24 +30,22 @@ You will need to enter the following input:
 Each requset should be executed successfully.
 
 
-### Test Spending Points
+### Test Spending Points (POST Request)
 
-You will need to enter the following input:
+After testing Adding Points, you will need to enter the following input:
 
 ```
 {"points": 5000}
 ```
 
-You should see the following response
+You should see the following response:
 
 <img width="910" alt="image" src="https://user-images.githubusercontent.com/7350037/202969992-832cda75-9ab1-43a6-8a69-d66d72263b92.png">
 
 
-### Test Getting Balance
+### Test Getting Balance (GET Request)
 
-No input is needed for this request. 
-
-You should see the following response
+No input is needed for this request. After testing Spending Points, just execute this request. You should see the following response:
 
 <img width="909" alt="image" src="https://user-images.githubusercontent.com/7350037/202970232-8b00b86e-e27d-42c8-9188-273d72fc35e1.png">
 
