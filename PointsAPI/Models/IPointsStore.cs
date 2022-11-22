@@ -11,7 +11,8 @@
         /// <param name="payer">The payer that this point comes from</param>
         /// <param name="points">Point number</param>
         /// <param name="transactionTimestamp">UTC timestamp for the point transaction</param>
-        void AddPoints(string payer, int points, DateTime transactionTimestamp);
+        /// <returns>Whether the points are added successfully</returns>
+        bool AddPoints(string payer, int points, DateTime transactionTimestamp);
 
         /// <summary>
         /// Spends a number of points

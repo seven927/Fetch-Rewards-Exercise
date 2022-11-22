@@ -69,7 +69,11 @@ namespace PointsAPI.Controllers
                 return BadRequest(modelMap);
             }
 
-            _pointsStore.AddPoints(payer, points.Value, timeStamp.Value);
+            if (!_pointsStore.AddPoints(payer, points.Value, timeStamp.Value)) 
+            {
+                modelMap.AddModelError(nameof(points), $"{points} cannot be added");
+                return BadRequest(modelMap);
+            }
             return Ok();
         }
 
@@ -100,11 +104,14 @@ namespace PointsAPI.Controllers
 
             foreach (KeyValuePair<string, int> spence in consumption)
             {
-                response.Add(new SpendPointsResponse()
+                if (spence.Value < 0)
                 {
-                    Payer = spence.Key,
-                    Points = spence.Value
-                });
+                    response.Add(new SpendPointsResponse()
+                    {
+                        Payer = spence.Key,
+                        Points = spence.Value
+                    });
+                }
             }
             return Ok(response);
         }
