@@ -10,7 +10,7 @@
         /// <summary>
         /// Keeps tracks of transactions from spending perspective
         /// </summary>
-        private readonly IList<PointsTransaction> _spenceList;
+        private readonly IList<CumulativePoints> _spenceList;
 
         /// <summary>
         /// A dictionary that maps the payer and its corresponding points balance
@@ -25,7 +25,7 @@
         public MemoryPointsStore() 
         {
             _transactionsHistory = new List<PointsTransaction>();
-            _spenceList = new List<PointsTransaction>();
+            _spenceList = new List<CumulativePoints>();
             _balance = new Dictionary<string, int>();
             _totalPoints = 0;
         }
@@ -55,11 +55,8 @@
             };
 
             AddBasedOnTimestamp(_transactionsHistory, trans);
-            AddBasedOnTimestamp(_spenceList, new PointsTransaction() {
-                Payer = payer,
-                Points = points,
-                TransactionTimstamp = transactionTimestamp
-            });
+            AddToSpenceTransactions(_spenceList, payer, points);
+
             _balance[trans.Payer] = _balance.ContainsKey(trans.Payer) ?
                 _balance[trans.Payer] + trans.Points : trans.Points;
             _totalPoints += points;
@@ -89,7 +86,7 @@
 
             int sum = 0;
             Dictionary<string, int> consumption = new();
-            foreach (PointsTransaction trans in _spenceList)
+            foreach (CumulativePoints trans in _spenceList)
             {
                 //If this is a spence transaction, and there is already positive points in consumption,
                 //and the negative points do not exceed the existing positive points, then deduct it. 
@@ -136,7 +133,11 @@
             AddSpenceTransactions(_transactionsHistory, consumption);
 
             //Add spence transactions to spence list
-            AddSpenceTransactions(_spenceList, consumption);
+            foreach (KeyValuePair<string, int> entry in consumption) 
+            {
+                AddToSpenceTransactions(_spenceList, entry.Key, entry.Value);
+            }
+
             return consumption;
         }
 
@@ -209,6 +210,46 @@
                         Points = spence.Value,
                         TransactionTimstamp = DateTime.UtcNow
                     });
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add transactions to spence transaction list
+        /// </summary>
+        /// <param name="spenceTransaction">spence transaction</param>
+        /// <param name="payer">payer name</param>
+        /// <param name="points">points for this transaction</param>
+        private static void AddToSpenceTransactions(IList<CumulativePoints> spenceTransaction, string payer, int points) 
+        {
+            if (points > 0)
+            {
+                //Add to the end if this adds points
+                spenceTransaction.Add(new CumulativePoints()
+                {
+                    Payer = payer,
+                    Points = points
+                });
+            }
+            else 
+            {
+                //Deduct points from previous transactions if this spends points
+                int positivePoints = Math.Abs(points);
+                foreach (CumulativePoints trans in spenceTransaction)
+                {
+                    if (trans.Payer == payer)
+                    {
+                        if (trans.Points > positivePoints)
+                        {
+                            trans.Points = trans.Points - positivePoints;
+                            break;
+                        }
+                        else
+                        {
+                            positivePoints = positivePoints - trans.Points;
+                            trans.Points = 0;
+                        }
+                    }
                 }
             }
         }
